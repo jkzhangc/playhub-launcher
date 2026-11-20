@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 14,
+  "version": 15,
   "games": [
     {
       "id": "1",
@@ -29,7 +29,7 @@
         },
         {
           "type": "torrent",
-          "url": "magnet:?xt=urn:btih:8f4c10b6fbc96b2214fd10e90e23d1bea3f1692f&dn=l3dre_v0.44.7z&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce",
+          "url": "magnet:?xt=urn:btih:8f4c10b6fbc96b2214fd10e90e23d1bea3f1692f&dn=l3dre_v0.44.7z&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fopen.demonii.com%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.qu.ax%3a6969%2fannounce&tr=udp%3a%2f%2ftracker-udp.gbitt.info%3a80%2fannounce&tr=udp%3a%2f%2ftracker.ducks.party%3a1984%2fannounce&tr=udp%3a%2f%2ftracker.corpscorp.online%3a80%2fannounce&tr=udp%3a%2f%2ftracker.bittor.pw%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.nyaa.vc%3a6969%2fannounce&tr=http%3a%2f%2ftracker.dler.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.gmi.gd%3a6969%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=http%3a%2f%2ftracker.renfei.net%3a8080%2fannounce&tr=udp%3a%2f%2ftracker.peerfect.org%3a6969%2fannounce",
           "label": "磁力下载"
         }
       ],
