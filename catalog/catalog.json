@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 10,
+  "version": 11,
   "games": [
     {
       "id": "1",
@@ -18,7 +18,7 @@
       "auto_install": true,
       "sources": [
         {
-          "type": "auto",
+          "type": "nutstore",
           "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
           "label": ""
         },
@@ -34,7 +34,7 @@
         }
       ],
       "source": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
-      "source_type": "auto"
+      "source_type": "nutstore"
     }
   ],
   "merchandising": {
