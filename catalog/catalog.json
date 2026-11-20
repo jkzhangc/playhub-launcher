@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 5,
+  "version": 6,
   "games": [
     {
       "id": "1",
@@ -30,10 +30,10 @@
   "merchandising": {
     "weekly_ids": [],
     "hero": {
-      "game_id": "",
+      "game_id": "1",
+      "eyebrow": "本周编辑推荐",
       "title": "发现下一段冒险",
       "subtitle": "好游戏，值得被看见。",
-      "eyebrow": "本周编辑推荐",
       "image": ""
     }
   }
