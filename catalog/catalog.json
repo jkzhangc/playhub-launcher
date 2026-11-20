@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 19,
+  "version": 20,
   "games": [
     {
       "id": "1",
@@ -42,7 +42,7 @@
     "hero": {
       "game_id": "1",
       "eyebrow": "本周编辑推荐",
-      "title": "发现下一段冒险",
+      "title": "L3D重制版",
       "subtitle": "好游戏，值得被看见。",
       "image": ""
     }
