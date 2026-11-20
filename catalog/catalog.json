@@ -1,7 +1,32 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 2,
-  "games": [],
+  "version": 3,
+  "games": [
+    {
+      "id": "1",
+      "name": "野比大雄的生化危机l3d重制版",
+      "developer": "剑客",
+      "version": "0.44",
+      "category": "arpg、类求生之路",
+      "summary": "支持多人联机游玩的野生",
+      "cover": "",
+      "executable": "l3dre_v0.44.exe",
+      "description": "",
+      "screenshots": [],
+      "system_requirements": "",
+      "platform": "windows",
+      "auto_install": true,
+      "sources": [
+        {
+          "type": "auto",
+          "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
+          "label": ""
+        }
+      ],
+      "source": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
+      "source_type": "auto"
+    }
+  ],
   "merchandising": {
     "weekly_ids": [],
     "hero": {
