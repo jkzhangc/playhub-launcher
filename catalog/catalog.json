@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 4,
+  "version": 5,
   "games": [
     {
       "id": "1",
@@ -9,9 +9,9 @@
       "version": "0.44",
       "category": "arpg、类求生之路",
       "summary": "支持多人联机游玩的野生",
-      "cover": "",
+      "cover": "https://raw.githubusercontent.com/jkzhangc/playhub-launcher/main/catalog/images/e2d43414664e3dcb588d9734.png",
       "executable": "l3dre_v0.44.exe",
-      "description": "",
+      "description": "野比大雄的生化危机l3d重制版。使用godot制作。除了还原游戏机制外，还增加多人联机等新模式和机制。优化了原版一些操作和机制",
       "screenshots": [],
       "system_requirements": "",
       "platform": "windows",
