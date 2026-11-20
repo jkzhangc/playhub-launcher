@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 6,
+  "version": 7,
   "games": [
     {
       "id": "1",
@@ -14,13 +14,18 @@
       "description": "野比大雄的生化危机l3d重制版。使用godot制作。除了还原游戏机制外，还增加多人联机等新模式和机制。优化了原版一些操作和机制",
       "screenshots": [],
       "system_requirements": "",
-      "platform": "windows",
-      "auto_install": true,
+      "platform": "other",
+      "auto_install": false,
       "sources": [
         {
           "type": "auto",
           "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
           "label": ""
+        },
+        {
+          "type": "direct",
+          "url": "https://github.com/jkzhangc/playhub-launcher/releases/download/games-v1/l3dre_v0.44.7z",
+          "label": "GitHub 下载"
         }
       ],
       "source": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
