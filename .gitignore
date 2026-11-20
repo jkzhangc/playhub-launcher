@@ -1,0 +1,31 @@
+# Runtime data and credentials
+.env
+.env.*
+*cookie*
+*token*
+state.json
+catalog-cache.json
+image-cache/
+recycle-backups/
+# Local tools and dependencies
+.venv/
+.runtime/
+.workbuddy/
+node_modules/
+vendor/
+# Generated builds, downloads and offline validation
+build*/
+dist*/
+deliverables/
+validation/
+previews/
+__pycache__/
+*.py[cod]
+*.spec
+*.playhub.part
+*.playhub.resume.json
+# Official management tool is private and not part of the public project
+private/
+launch_studio.py
+admin.js
+tests/test_studio.py

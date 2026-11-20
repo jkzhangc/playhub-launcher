@@ -1,0 +1,227 @@
+[
+  {
+    "path": ".github/workflows/release-alpha.yml",
+    "bytes": 2056,
+    "sha256": "d290d2e4ae360ad7072f0a4e972b4d3889f4330c6cc1ef245b1bbf0e16426b70"
+  },
+  {
+    "path": ".gitignore",
+    "bytes": 502,
+    "sha256": "b9e71e4db729d7906445835bbf17e63bd379e64948c79a19aff4ccd997f0b2cb"
+  },
+  {
+    "path": "assets/playhub-128.png",
+    "bytes": 7921,
+    "sha256": "e9882fd5113a72c25e12497a92273a65cc07494ada60794056ad017b8e9e3006"
+  },
+  {
+    "path": "assets/playhub-16.png",
+    "bytes": 725,
+    "sha256": "684130e013082bc541c9a3038ed23c94b09e2fbbf8c570fe97699dd1e7e9fb3f"
+  },
+  {
+    "path": "assets/playhub-24.png",
+    "bytes": 1099,
+    "sha256": "0a96fdfa68facf3f29842279c9ae6289c17f5b2323c52a53f2047c2a53a2881a"
+  },
+  {
+    "path": "assets/playhub-256.png",
+    "bytes": 17559,
+    "sha256": "a858dbe6afb47f3dd54f970125b0368bc548377a7a88e1e44f89266c99f201e8"
+  },
+  {
+    "path": "assets/playhub-32.png",
+    "bytes": 1619,
+    "sha256": "dfe7da37189f4a1734d1fbf0d9dd5cb051a9020c1e0918b1538613ba9b27d255"
+  },
+  {
+    "path": "assets/playhub-48.png",
+    "bytes": 2562,
+    "sha256": "1f768dd3581f7553d4b13d9360ba994e2705dfa68af45b2d82a310bd19932bbc"
+  },
+  {
+    "path": "assets/playhub-64.png",
+    "bytes": 3418,
+    "sha256": "a29991bcf4e15421fad5a03e9d9809c0124e42342a84a082cd6343cd36bf95ed"
+  },
+  {
+    "path": "assets/playhub.ico",
+    "bytes": 270398,
+    "sha256": "22bf0f3894b1e1e1c106e32ac2e2634c37ad5fedb592c106e64d83dd175bfa2e"
+  },
+  {
+    "path": "assets/playhub.svg",
+    "bytes": 1270,
+    "sha256": "a500d34750f9a2ef2f79a23b2ec0988ffe217471f60f2d891f5269ccb2ac34b6"
+  },
+  {
+    "path": "benchmark-results/github-large-benchmark.json",
+    "bytes": 3162,
+    "sha256": "e34d1e689baee3c0705cfb664dafc0279db8beccb424fd1b77ad37b2ce4287cd"
+  },
+  {
+    "path": "catalog/catalog.json",
+    "bytes": 306,
+    "sha256": "e1c1028b955a7f148522baf8f50f06f12d02fe081582fa49569babe4b5041e4e"
+  },
+  {
+    "path": "launch.py",
+    "bytes": 2958,
+    "sha256": "3e10bfb37670f96b56428f70bae7a84531ba0df6e74f6c04affdb2d25f546808"
+  },
+  {
+    "path": "legal/libtorrent-LICENSE.txt",
+    "bytes": 9265,
+    "sha256": "cf49a9407ed980decc8323e8363f302532c770ad99630911f3b24f2c9a1ee43a"
+  },
+  {
+    "path": "legal/Node-LICENSE.txt",
+    "bytes": 160555,
+    "sha256": "ed34dd8e3f0a78dbaf00d0444ce8e285b015b765379c2e17880455f70370f8e9"
+  },
+  {
+    "path": "legal/PlayHub-LICENSE.txt",
+    "bytes": 1302,
+    "sha256": "4b28fdf1d1b34256e84e3b8b84a4f938fa93097beca8c0e07469e2649cfa0aab"
+  },
+  {
+    "path": "legal/Playwright-LICENSE.txt",
+    "bytes": 11601,
+    "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+  },
+  {
+    "path": "legal/Playwright-NOTICE.txt",
+    "bytes": 254,
+    "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+  },
+  {
+    "path": "legal/Python-LICENSE.txt",
+    "bytes": 14086,
+    "sha256": "77121f04e144538c0d1a0eb896dd84151132e819d796f47cc4f914e7f44ca41e"
+  },
+  {
+    "path": "legal/Qt-GPL-3.0.txt",
+    "bytes": 35821,
+    "sha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b"
+  },
+  {
+    "path": "legal/Qt-LGPL-3.0.txt",
+    "bytes": 7816,
+    "sha256": "ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9"
+  },
+  {
+    "path": "LICENSE",
+    "bytes": 1302,
+    "sha256": "4b28fdf1d1b34256e84e3b8b84a4f938fa93097beca8c0e07469e2649cfa0aab"
+  },
+  {
+    "path": "playhub/cloud_login.py",
+    "bytes": 4499,
+    "sha256": "c5c1f83aa037589892bf94a7d194b488a62f1eeace870d7016eebeaa6fb60dee"
+  },
+  {
+    "path": "playhub/core.py",
+    "bytes": 4489,
+    "sha256": "200fbb93b857ce9390f6088cd3e4763b937cce682f7a76c5726e27b1b3ae0713"
+  },
+  {
+    "path": "playhub/github_delivery.py",
+    "bytes": 7883,
+    "sha256": "555708ba10ca4a2581f0451d0195e4b93ac2f9d08d0b86da6287fe167b996e78"
+  },
+  {
+    "path": "playhub/http_engine.py",
+    "bytes": 6763,
+    "sha256": "bdeb2d48d9cc82e24b376546218fef735898ab8fecd8194cc6cf94ac6c859060"
+  },
+  {
+    "path": "playhub/install.py",
+    "bytes": 3849,
+    "sha256": "1b4be63b733af4de2be5fda78047a1e0788408456b31c6245e11729d7c75113d"
+  },
+  {
+    "path": "playhub/lanzou.py",
+    "bytes": 3891,
+    "sha256": "8b5fdab28a85835b3b5d8ae3c7aa12dff254419ce908b8811a0c440cf0a79eb7"
+  },
+  {
+    "path": "playhub/manager.py",
+    "bytes": 12995,
+    "sha256": "624cde93830ebfa10292cd785984a03418f0ca6a35609687f45d433e5c46a463"
+  },
+  {
+    "path": "playhub/p2p.py",
+    "bytes": 7820,
+    "sha256": "cb18a59d6fd6e89d74b30976654019850a0d956f682524f3e4cbcc59a067f07d"
+  },
+  {
+    "path": "playhub/sources.py",
+    "bytes": 8128,
+    "sha256": "abb82858bc6dab146c984e5d9756026e7abe65557fff3434b0afb69ba40bc475"
+  },
+  {
+    "path": "playhub/task_files.py",
+    "bytes": 1804,
+    "sha256": "755c47116e5afea30a7d0f062d50eec0af8661cd16004b089a659eb967cc3f49"
+  },
+  {
+    "path": "playhub/ui.py",
+    "bytes": 75084,
+    "sha256": "d9722a3202fc3c92509cd9e7f70b854903b3da8fbf13d8f909841cfc94a38279"
+  },
+  {
+    "path": "README.md",
+    "bytes": 3403,
+    "sha256": "9470feacbdd271dc2b7ee889278cc958c7d86ae5324997d936015a04021b78d4"
+  },
+  {
+    "path": "release-notes.txt",
+    "bytes": 1506,
+    "sha256": "9a48a2b7e85f34b8a66f67a3c4601b3e0beb94a09063c1888edc8ccd20157992"
+  },
+  {
+    "path": "requirements.txt",
+    "bytes": 53,
+    "sha256": "77fb4c1241bc95b91f35943608c13bc3957e3b8af17a9ea51bdb902513212ab1"
+  },
+  {
+    "path": "tests/test_catalog_ui.py",
+    "bytes": 3470,
+    "sha256": "85eccd3040c6960f74b3b1c053be46ee3cd008319db0ddff531ad8b5b4db810d"
+  },
+  {
+    "path": "tests/test_downloads.py",
+    "bytes": 5870,
+    "sha256": "fa2938d972ab8bc41061d6e5440a6b9282526574e22150c7de3ee62fddaa0b68"
+  },
+  {
+    "path": "tests/test_github_delivery.py",
+    "bytes": 3072,
+    "sha256": "b6d84104507802e5ad99eca71fb1fa144ba0198292e9ec72006ae696de4e80ed"
+  },
+  {
+    "path": "tests/test_tasks_install.py",
+    "bytes": 5128,
+    "sha256": "69b88794495fc2cafee3cac46b180d76da894291c34b44c302d9fe47e3e0c261"
+  },
+  {
+    "path": "tools/build_windows.py",
+    "bytes": 2347,
+    "sha256": "68e98220d5aaf89704bc5390f37e2cc554e05f7599a28cda859f756f4d65b77e"
+  },
+  {
+    "path": "tools/cloud_bridge.cjs",
+    "bytes": 10622,
+    "sha256": "bc27c757c996a8fc227a1d87a6e2e693d936e6260307ed0a38484440f26afd00"
+  },
+  {
+    "path": "tools/render_icon.py",
+    "bytes": 861,
+    "sha256": "c368e9274851a03469ff22e8dc358e8654873bb75d2dd41e19aa9986b804c1a2"
+  },
+  {
+    "path": "tools/test_cloud_flow.cjs",
+    "bytes": 710,
+    "sha256": "82f2337f91132c72e318490269eecb4e4c495766aa58454d2bd637378bfb8b03"
+  }
+]

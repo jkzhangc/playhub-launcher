@@ -1,0 +1,103 @@
+{
+  "tested_at": "2026-11-20T17:55:48.475972+08:00",
+  "asset": "uv-x86_64-pc-windows-msvc.zip",
+  "release": "0.13.9",
+  "origin": "https://github.com/astral-sh/uv/releases/download/0.13.9/uv-x86_64-pc-windows-msvc.zip",
+  "expected_bytes": 15567875,
+  "official_sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+  "results": [
+    {
+      "name": "GitHub源站",
+      "prefix": "",
+      "connections": 1,
+      "round": 1,
+      "completed": true,
+      "bytes": 15567875,
+      "seconds": 4.448,
+      "mib_per_second": 3.338,
+      "sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+      "matches_official": true,
+      "connection_seconds": 1.493
+    },
+    {
+      "name": "GHFast",
+      "prefix": "https://ghfast.top/",
+      "connections": 1,
+      "round": 1,
+      "completed": false,
+      "error": "HTTP Error 403: Forbidden",
+      "seconds": 1.166
+    },
+    {
+      "name": "GH-Proxy",
+      "prefix": "https://gh-proxy.com/",
+      "connections": 1,
+      "round": 1,
+      "completed": true,
+      "bytes": 15567875,
+      "seconds": 6.576,
+      "mib_per_second": 2.258,
+      "sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+      "matches_official": true,
+      "connection_seconds": 1.18
+    },
+    {
+      "name": "GHProxy.net",
+      "prefix": "https://ghproxy.net/",
+      "connections": 1,
+      "round": 1,
+      "completed": false,
+      "error": "达到22秒预算，本次结束",
+      "seconds": 22.106
+    },
+    {
+      "name": "GitHub源站",
+      "prefix": "",
+      "connections": 4,
+      "round": 1,
+      "completed": true,
+      "bytes": 15567875,
+      "seconds": 9.086,
+      "mib_per_second": 1.634,
+      "sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+      "matches_official": true,
+      "connection_seconds": 1.781
+    },
+    {
+      "name": "GH-Proxy",
+      "prefix": "https://gh-proxy.com/",
+      "connections": 4,
+      "round": 1,
+      "completed": false,
+      "error": "达到22秒预算，本次结束",
+      "seconds": 22.079
+    },
+    {
+      "name": "GitHub源站",
+      "prefix": "",
+      "connections": 1,
+      "round": 2,
+      "completed": true,
+      "bytes": 15567875,
+      "seconds": 11.049,
+      "mib_per_second": 1.344,
+      "sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+      "matches_official": true,
+      "connection_seconds": 0.952
+    },
+    {
+      "name": "GH-Proxy",
+      "prefix": "https://gh-proxy.com/",
+      "connections": 1,
+      "round": 2,
+      "completed": true,
+      "bytes": 15567875,
+      "seconds": 4.061,
+      "mib_per_second": 3.656,
+      "sha256": "edd61f7f5728a56cc62455386661860bdfc7bab65872f39b0c25bdcc1d8e1beb",
+      "matches_official": true,
+      "connection_seconds": 1.031
+    }
+  ],
+  "scope": "Same complete asset, sequential endpoint tests, concurrent requests only inside 4-connection mode. Includes TLS/redirect overhead. This machine and this time only. No credentials or execution."
+}
