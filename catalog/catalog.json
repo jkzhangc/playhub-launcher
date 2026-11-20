@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 11,
+  "version": 12,
   "games": [
     {
       "id": "1",
@@ -14,13 +14,13 @@
       "description": "野比大雄的生化危机l3d重制版。使用godot制作。除了还原游戏机制外，还增加多人联机等新模式和机制。优化了原版一些操作和机制",
       "screenshots": [],
       "system_requirements": "",
-      "platform": "android",
+      "platform": "other",
       "auto_install": true,
       "sources": [
         {
           "type": "nutstore",
           "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
-          "label": ""
+          "label": "电脑和手机"
         },
         {
           "type": "direct",
