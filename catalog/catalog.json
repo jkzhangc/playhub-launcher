@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 8,
+  "version": 9,
   "games": [
     {
       "id": "1",
@@ -26,6 +26,11 @@
           "type": "direct",
           "url": "https://github.com/jkzhangc/playhub-launcher/releases/download/games-v1/l3dre_v0.44.7z",
           "label": "GitHub 下载"
+        },
+        {
+          "type": "torrent",
+          "url": "magnet:?xt=urn:btih:8f4c10b6fbc96b2214fd10e90e23d1bea3f1692f&dn=l3dre_v0.44.7z&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce",
+          "label": "磁力下载"
         }
       ],
       "source": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
