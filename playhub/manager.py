@@ -1,9 +1,10 @@
 from __future__ import annotations
 import threading
 import uuid
+import zipfile
 from pathlib import Path
 from PySide6.QtCore import QObject, Signal
-from .core import AuthorizationRequired, FileEntry, StateStore
+from .core import AuthorizationRequired, DownloadError, FileEntry, StateStore
 from .http_engine import Paused, RateLimiter, download_file
 from .p2p import TorrentEngine
 
@@ -107,26 +108,9 @@ class DownloadManager(QObject):
                         task['results'] = list(results)
                         self.store.save()
             self._record_outputs(task, results)
-            install = task.get('install') or {}
             installation_message = ''
-            if install.get('enabled'):
-                from .install import install_zip
-                archive = next((Path(r['path']) for r in results if Path(r['path']).suffix.lower() == '.zip'), None)
-                if archive is None:
-                    installation_message = '；此文件不是ZIP，未解压或配置Windows启动项'
-                else:
-                    self.update(task, status='installing', message='正在安全解压并按管理员配置登记启动项')
-                    installed = install_zip(archive, root, install, stop)
-                    task['owned_files'].extend(installed['files'])
-                    task['installed'] = installed
-                    library = self.store.data['library']
-                    game = next((g for g in library if g.get('id') == installed['game_id']), None)
-                    fields = {'id': installed['game_id'], 'name': installed['name'], 'executable': installed['executable'], 'install_directory': installed['directory']}
-                    if game:
-                        game.update(fields)
-                    else:
-                        library.append(fields)
-                    installation_message = '；已解压并配置启动程序，未自动运行'
+            if (task.get('install') or {}).get('enabled'):
+                installation_message = self._extract_results(task, results, root, stop)
             self.update(task, status='complete', done=sum(x['bytes'] for x in results), total=sum(x['bytes'] for x in results),
                         speed=0, message='下载完成；已计算 SHA-256' + installation_message, results=results)
             self.notification.emit(task['title'] + ' 下载完成' + installation_message + '。不会自动运行。')
@@ -142,6 +126,76 @@ class DownloadManager(QObject):
             if not stop.is_set():
                 self.start_next()
 
+    def _extract_results(self, task, results, root, stop):
+        from .install import install_archive, install_archives
+        install=task.get('install') or {}
+        archives=install_archives(results,root);packages=[];failures=[]
+        for archive in archives:
+            if stop.is_set():break
+            self.update(task,status='installing',message='正在安全解压：'+archive.name)
+            try:
+                installed=install_archive(archive,root,{'name':task['title'],**install},stop)
+            except (OSError,ValueError,RuntimeError,DownloadError,zipfile.BadZipFile) as exc:
+                failures.append(archive.name+'：'+str(exc))
+                if stop.is_set():break
+                continue
+            packages.append(installed);task.setdefault('owned_files',[]).extend(installed['files'])
+        task['extracted_packages']=packages
+        launches=[item for item in packages if item['executable']]
+        if len(launches)==1 and install.get('game_id') and not failures and not stop.is_set():
+            installed=launches[0];task['installed']=installed
+            library=self.store.data['library']
+            game=next((g for g in library if g.get('id')==installed['game_id']),None)
+            from .library_updates import catalog_snapshot
+            snapshot=catalog_snapshot(install.get('catalog_game') or {})
+            version=str(install.get('version') or '')
+            baseline=version or str((game or {}).get('installed_version') or (game or {}).get('tracked_version') or (game or {}).get('version') or '')
+            fields={**snapshot,'id':installed['game_id'],'name':installed['name'],
+                    'executable':installed['executable'],'install_directory':installed['directory'],
+                    'installed_version':version,'tracked_version':baseline,'version':baseline,
+                    'version_source':'download_install' if version else 'unknown'}
+            if game is not None:
+                fields['name']=game.get('custom_name') or game.get('name') or installed['name'];game.update(fields)
+            else:library.append(fields)
+        text=('；已分别解压 '+str(len(packages))+' 个压缩包到 installed 目录') if archives else '；所选文件中未找到支持的压缩包（ZIP/7z/TAR/GZ/BZ2/XZ）'
+        if packages and (len(launches)!=1 or failures or stop.is_set()):text+='；未自动登记启动项，可在游戏库手动选择'
+        if failures:text+='；解压失败：'+'；'.join(failures)
+        if stop.is_set():text+='；解压已取消，原压缩包和旧游戏未改动'
+        return text
+
+    def extract_completed(self, ident):
+        with self.lock:
+            if self.worker and self.worker.is_alive():raise DownloadError('请等待当前下载/解压结束后再解压已下载文件。')
+            task=next((t for t in self.tasks if t['id']==ident),None)
+            if not task or task.get('status')!='complete' or not task.get('results'):
+                raise DownloadError('请先完成下载，再解压已有文件。')
+            task.setdefault('install',{})['enabled']=True
+            self.stop_event=threading.Event()
+            self.update(task,status='installing',message='正在校验已下载压缩包，不重新下载。')
+            self.worker=threading.Thread(target=self._run_extract,args=(task,self.stop_event),daemon=True)
+            self.worker.start()
+
+    def _run_extract(self, task, stop):
+        from .core import hash_file
+        try:
+            root=Path(task['directory']);results=task['results']
+            from .install import install_archives
+            archives=install_archives(results,root)
+            if not archives:raise DownloadError('没有支持的压缩包；RAR、分卷包和安装器暂不支持。')
+            for archive in archives:
+                if stop.is_set():raise DownloadError('已取消解压，原文件未改动。')
+                record=next(item for item in results if Path(item['path']).resolve()==archive.resolve())
+                if archive.stat().st_size!=record['bytes'] or not record.get('sha256') or hash_file(archive)!=record['sha256']:
+                    raise DownloadError('已下载压缩包发生变化或缺少校验记录，未解压：'+archive.name)
+            message=self._extract_results(task,results,root,stop)
+            self.update(task,status='complete',speed=0,message='已有下载文件处理完成'+message)
+            self.notification.emit(task['title']+' 解压处理结束。不会自动运行。')
+        except Exception as exc:
+            self.update(task,status='complete',speed=0,message='下载文件保留；解压未完成：'+str(exc))
+        finally:
+            with self.lock:self.worker=None
+            if not stop.is_set():self.start_next()
+
     def update(self, task, **values):
         with self.lock:
             task.update(values)
@@ -154,7 +208,10 @@ class DownloadManager(QObject):
     def pause(self, ident):
         task = next((t for t in self.tasks if t['id'] == ident), None)
         if task:
-            if task['status'] == 'downloading':
+            if task['status'] == 'installing':
+                self.stop_event.set()
+                self.update(task, message='正在取消解压，保留原压缩包和独立输出目录…')
+            elif task['status'] == 'downloading':
                 self.stop_event.set()
                 self.update(task, message='正在暂停，等待网络读操作结束…')
             elif task['status'] == 'queued':

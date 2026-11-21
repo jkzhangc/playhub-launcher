@@ -1,6 +1,7 @@
 """BitTorrent is P2P: resolve metadata first, select files, then download."""
 from __future__ import annotations
 import json
+import ipaddress
 import threading
 import time
 from pathlib import Path
@@ -8,6 +9,7 @@ from urllib.parse import parse_qs, urlsplit
 import libtorrent as lt
 from .core import DownloadError, FileEntry, safe_relative, safe_target, hash_file
 from .http_engine import Paused
+from .trackers import merge_trackers
 
 class TorrentEngine:
     def __init__(self, cache: Path, local_only=False, upload_kib=64):
@@ -15,12 +17,46 @@ class TorrentEngine:
         self.cache = cache
         self.local_only = local_only
         self.session = lt.session({'listen_interfaces': '127.0.0.1:0' if local_only else '0.0.0.0:0',
-                                   'enable_dht': not local_only, 'enable_lsd': False,
+                                   'enable_dht': not local_only, 'enable_lsd': not local_only,
                                    'enable_upnp': False, 'enable_natpmp': False,
                                    'upload_rate_limit': max(1, int(upload_kib)) * 1024,
                                    'alert_mask': int(lt.alert.category_t.error_notification | lt.alert.category_t.status_notification)})
         self.handles = {}
         self.lock = threading.RLock()
+        self.peer_hints = {}  # Explicit user-entered endpoints; never persisted or port-scanned.
+
+    @staticmethod
+    def _magnet_key(magnet):
+        return tuple(sorted(parse_qs(urlsplit(magnet).query).get('xt', [])))
+
+    def add_peer_hint(self, magnet, endpoint):
+        try:
+            endpoint=endpoint.strip()
+            parsed=urlsplit('tcp://'+endpoint)
+            address=ipaddress.ip_address(parsed.hostname or '')
+            port=parsed.port
+            if (parsed.username or parsed.password or parsed.path or parsed.query or parsed.fragment
+                    or not port or address.is_unspecified or address.is_multicast):
+                raise ValueError()
+            peer=(str(address),port)
+            key=self._magnet_key(magnet)
+            if not key:raise ValueError()
+        except ValueError:
+            raise DownloadError('请填写做种端的 IP:BT监听端口，例如 127.0.0.1:51413；不是 Web UI 端口。') from None
+        with self.lock:
+            peers=self.peer_hints.setdefault(key,[])
+            if peer not in peers:peers.append(peer)
+        return peer
+
+    def _connect_hints(self, handle, magnet, connected=None):
+        if connected is None:connected=set()
+        with self.lock:
+            peers=list(self.peer_hints.get(self._magnet_key(magnet),()))
+        for peer in peers:
+            if peer in connected:continue
+            handle.connect_peer(peer)
+            connected.add(peer)
+        return connected
 
     @staticmethod
     def entries(info):
@@ -59,19 +95,26 @@ class TorrentEngine:
             params = lt.parse_magnet_uri(magnet)
         except Exception as e:
             raise DownloadError('磁力链接格式无效。') from e
+        if not self.local_only:
+            self._add_public_trackers(params, params.trackers, params.tracker_tiers)
         params.save_path = str(self.cache / 'metadata')
         # Fetch metadata, not payload. No file is selected until the user confirms.
         params.flags &= ~(lt.torrent_flags.paused | lt.torrent_flags.auto_managed)
         params.flags |= lt.torrent_flags.default_dont_download | lt.torrent_flags.upload_mode
         h = self.session.add_torrent(params)
         self._connect_explicit(h, magnet)
+        connected=self._connect_hints(h,magnet)
         started = time.monotonic()
         try:
             while not h.status().has_metadata:
                 if stop.wait(0.2):
                     raise Paused()
+                connected=self._connect_hints(h,magnet,connected)
                 if time.monotonic() - started > timeout:
-                    raise DownloadError('磁力元数据获取超时：没有可连接节点，或网络/DHT 不可用。未开始下载游戏文件。')
+                    status=h.status()
+                    raise DownloadError('磁力文件列表获取超时；已连接节点 '+str(status.num_peers)+'。'
+                        '请确认做种程序仍在线且为100%；同机可填写127.0.0.1:做种端BT监听端口直接测试，'
+                        '该端口不是Web UI端口。Tracker可用不等于做种节点可达。未开始下载游戏文件。')
                 status = h.status()
                 if status.errc.value():
                     raise DownloadError(str(status.errc.message()))
@@ -84,6 +127,16 @@ class TorrentEngine:
         finally:
             h.pause()
             self.session.remove_torrent(h)
+
+    @staticmethod
+    def _add_public_trackers(params, urls, tiers):
+        urls, tiers = list(urls), list(tiers)
+        tiers = [tiers[i] if i < len(tiers) else 0 for i in range(len(urls))]
+        merged = merge_trackers(urls)
+        by_url = dict(zip(urls, tiers))
+        first_extra = max(tiers, default=-1) + 1
+        params.trackers = merged
+        params.tracker_tiers = [by_url[url] if url in by_url else first_extra for url in merged]
 
     def _connect_explicit(self, handle, magnet):
         for value in parse_qs(urlsplit(magnet).query).get('x.pe', []):
@@ -117,6 +170,13 @@ class TorrentEngine:
         marker.write_text(json.dumps({'hash': key, 'paths': sorted(owned)}, ensure_ascii=False), 'utf-8')
         params = lt.add_torrent_params()
         params.ti, params.save_path = info, str(root)
+        if magnet and not self.local_only and not info.priv():
+            original = lt.parse_magnet_uri(magnet)
+            embedded = list(info.trackers())
+            tiers = list(original.tracker_tiers)
+            tiers += [0] * max(0, len(original.trackers)-len(tiers))
+            self._add_public_trackers(params, list(original.trackers) + [t.url for t in embedded],
+                                      tiers + [t.tier for t in embedded])
         params.flags &= ~(lt.torrent_flags.paused | lt.torrent_flags.auto_managed)
         priorities = [0] * info.num_files()
         for f in selected:
@@ -127,13 +187,16 @@ class TorrentEngine:
         h.set_download_limit(max(0, int(limit_mib * 1024 * 1024)))
         with self.lock:
             self.handles[key] = h
+        route_magnet=magnet or lt.make_magnet_uri(info)
         if magnet:
             self._connect_explicit(h, magnet)
+        connected=self._connect_hints(h,route_magnet)
         started = time.monotonic()
         try:
             while True:
                 if stop.wait(0.2):
                     raise Paused()
+                connected=self._connect_hints(h,route_magnet,connected)
                 s = h.status()
                 if s.errc.value():
                     raise DownloadError('P2P 下载错误：' + s.errc.message())

@@ -10,7 +10,7 @@ import threading
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 
-VERSION = '0.2.0'
+VERSION = '0.2.9'
 USER_AGENT = 'PlayHub/' + VERSION + ' (+https://github.com/jkzhangc/playhub-launcher)'
 
 class DownloadError(Exception):
@@ -88,12 +88,15 @@ class StateStore:
         self.data = {'name': '', 'directory': str(Path.home() / 'Games' / 'PlayHub'), 'ask_directory': True,
                      'limit_mib': 0.0, 'upload_kib': 64, 'library': [], 'tasks': [], 'auto_check': True,
                      'catalog_url': 'https://raw.githubusercontent.com/jkzhangc/playhub-launcher/main/catalog/catalog.json', 'repository': 'jkzhangc/playhub-launcher', 'seed_after': False,
-                     'github_mode': 'origin', 'github_mirrors': ['ghproxy']}
+                     'github_mode': 'smart', 'github_mirrors': ['ghfast', 'ghproxy']}
+        self.default_repository = self.data['repository']
         if self.path.exists():
             try:
                 old = json.loads(self.path.read_text('utf-8'))
                 if isinstance(old, dict):
                     self.data.update(old)
+                    if old.get('github_mirrors') == ['ghproxy']:
+                        self.data['github_mirrors'] = ['ghfast', 'ghproxy']
             except (ValueError, OSError):
                 backup = base / 'state-unreadable.json'
                 if not backup.exists():

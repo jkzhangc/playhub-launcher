@@ -39,4 +39,46 @@ class DeliveryTests(unittest.TestCase):
             def json(self,url):return {'tag_name':'v1','assets':[{'id':3,'name':'game.zip','size':100,'browser_download_url':URL,'digest':'sha256:'+'a'*64}]}
         metadata,files=release_files('example/game',web=Fake());self.assertEqual(files[0].sha256,'a'*64);self.assertEqual(files[0].size,100)
 
+    def test_slow_origin_switches_then_returns_if_mirror_fails(self):
+        attempts=[]
+        def fetch(entry, root, stop, limiter, progress, web):
+            attempts.append(entry.url)
+            if len(attempts)==1:
+                progress(65536, 8*1024**2, 0)
+                progress(131072, 8*1024**2, 0)
+            elif len(attempts)==2:raise DownloadError('mirror unavailable')
+            return {'bytes':100}
+        with patch('playhub.github_delivery.download_file',side_effect=fetch), patch('playhub.github_delivery.time.monotonic',side_effect=[0,9]), patch('playhub.github_delivery.probe_source',return_value={'ok':True,'mib_per_second':1}):
+            result=download_release(ENTRY,Path('.'),threading.Event(),mode='smart')
+        self.assertEqual(len(attempts),3)
+        self.assertEqual(attempts[0],attempts[2])
+        self.assertIn('gh-proxy.com',attempts[1])
+        self.assertFalse(result['mirror_used'])
+
+    def test_smart_probes_sub_mib_origin_and_picks_fastest_mirror(self):
+        attempts=[]
+        def fetch(entry, root, stop, limiter, progress, web):
+            attempts.append(entry.url)
+            if entry.url==URL:
+                progress(0, 16*1024**2, 0)
+                progress(4*1024**2, 16*1024**2, 0)
+            return {'bytes':100}
+        def probe(name,url,size,stop,**kwargs):
+            return {'ok':True,'mib_per_second':2 if 'ghfast.top' in url else 1}
+        with patch('playhub.github_delivery.download_file',side_effect=fetch), patch('playhub.github_delivery.time.monotonic',side_effect=[0,9]), patch('playhub.github_delivery.probe_source',side_effect=probe):
+            result=download_release(ENTRY,Path('.'),threading.Event(),mode='smart',mirror_ids=['ghproxy','ghfast'])
+        self.assertEqual(attempts,[URL,'https://ghfast.top/'+URL])
+        self.assertTrue(result['mirror_used'])
+
+    def test_update_manifest_mirror_never_supplies_trusted_hash(self):
+        import io,json
+        from playhub.github_delivery import update_files, OFFICIAL_REPOSITORY
+        package='PlayHub-0.2.2-alpha-win-x64.zip'
+        url='https://github.com/'+OFFICIAL_REPOSITORY+'/releases/download/v0.2.2-alpha/'+package
+        data=[{'tag_name':'v0.2.2-alpha','assets':[{'id':5,'size':100,'name':package,'state':'uploaded','browser_download_url':url,'digest':'sha256:'+'f'*64}]}]
+        with patch('playhub.github_delivery.WebClient.open',side_effect=[DownloadError('offline'),io.BytesIO(json.dumps(data).encode())]) as opened:
+            tag,line,entry,verified=update_files()
+        self.assertEqual(tag,'v0.2.2-alpha');self.assertFalse(verified);self.assertEqual(entry.sha256,'')
+        self.assertIn('gh-proxy.com',opened.call_args.args[0])
+
 if __name__=='__main__':unittest.main(verbosity=2)

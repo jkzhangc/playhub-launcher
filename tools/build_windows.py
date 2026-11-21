@@ -19,10 +19,18 @@ if not node_target.exists():shutil.copy2(node,node_target)
 package=ROOT/'node_modules/playwright-core'
 if not package.exists():raise SystemExit('Install playwright-core in this repository: npm install --prefix . --no-save playwright-core')
 if not (VENDOR/'playwright-core').exists():shutil.copytree(package,VENDOR/'playwright-core')
-args=[sys.executable,'-m','PyInstaller','--windowed','--onedir','--noupx','--name','PlayHub','--distpath',str(ROOT/'dist'),'--workpath',str(ROOT/'build'),'--specpath',str(ROOT/'build'),'--icon',str(ROOT/'assets/playhub.ico'),'--collect-all','libtorrent','--exclude-module','private','--exclude-module','playhub.admin_policy','--exclude-module','PySide6.QtWebEngineCore','--exclude-module','PySide6.QtWebEngineWidgets','--exclude-module','PySide6.QtWebView']
+args=[sys.executable,'-m','PyInstaller','--windowed','--onedir','--noupx','--name','PlayHub','--distpath',str(ROOT/'dist'),'--workpath',str(ROOT/'build'),'--specpath',str(ROOT/'build'),'--icon',str(ROOT/'assets/playhub.ico'),'--collect-all','libtorrent','--collect-all','py7zr','--exclude-module','private','--exclude-module','playhub.admin_policy','--exclude-module','PySide6.QtWebEngineCore','--exclude-module','PySide6.QtWebEngineWidgets','--exclude-module','PySide6.QtWebView']
 for source,dest in [('assets','assets'),('catalog','catalog'),('legal','legal'),('benchmark-results','benchmark-results'),('tools/cloud_bridge.cjs','tools'),('vendor','vendor')]:args+=['--add-data',str(ROOT/source)+';'+dest]
 args.append(str(ROOT/'launch.py'));subprocess.run(args,cwd=ROOT,check=True)
 subprocess.run([str(ROOT/'dist/PlayHub/PlayHub.exe'),'--smoke-test','--data-dir',str(ROOT/'validation/build-state'),'--capture-dir',str(ROOT/'validation/build-ui')],cwd=ROOT,check=True)
+from importlib.metadata import distribution
+license_root=ROOT/'dist/PlayHub/third-party-licenses';license_root.mkdir(exist_ok=True)
+for dependency in ('py7zr','pycryptodomex','brotli','psutil','backports.zstd','pyppmd','pybcj','multivolumefile','inflate64','texttable'):
+    metadata=distribution(dependency)
+    for item in metadata.files or []:
+        if not any(word in str(item).lower() for word in ('license','copying','notice')):continue
+        source=Path(metadata.locate_file(item))
+        if source.is_file():shutil.copy2(source,license_root/(dependency+'-'+metadata.version+'-'+source.name))
 output=ROOT/'dist'/('PlayHub-'+VERSION+'-alpha-win-x64.zip')
 with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
     for p in sorted((ROOT/'dist/PlayHub').rglob('*')):

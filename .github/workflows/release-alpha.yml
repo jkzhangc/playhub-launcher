@@ -6,7 +6,7 @@ on:
       tag:
         description: Pre-release tag
         required: true
-        default: v0.2.0-alpha
+        default: v0.2.9-alpha
 
 permissions:
   contents: write
