@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 24,
+  "version": 25,
   "games": [
     {
       "id": "1",
@@ -16,13 +16,13 @@
       "author_notes": "",
       "screenshots": [],
       "system_requirements": "",
-      "platform": "other",
+      "platform": "windows",
       "auto_install": true,
       "sources": [
         {
           "type": "nutstore",
-          "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
-          "label": ""
+          "url": "https://www.jianguoyun.com/p/DSU8pZgQgZ_NDhj1yrEGIAA",
+          "label": "坚果云"
         },
         {
           "type": "direct",
@@ -35,7 +35,7 @@
           "label": "磁力下载"
         }
       ],
-      "source": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
+      "source": "https://www.jianguoyun.com/p/DSU8pZgQgZ_NDhj1yrEGIAA",
       "source_type": "nutstore"
     }
   ],
