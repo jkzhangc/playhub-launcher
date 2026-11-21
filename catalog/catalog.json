@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 28,
+  "version": 29,
   "games": [
     {
       "id": "1",
@@ -16,7 +16,7 @@
       "author_notes": "手机端请在qq群1125775141下载",
       "screenshots": [],
       "system_requirements": "",
-      "platform": "android",
+      "platform": "windows",
       "auto_install": true,
       "sources": [
         {
