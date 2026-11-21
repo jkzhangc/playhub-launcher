@@ -1,6 +1,6 @@
 {
   "format": "playhub-catalog-v1",
-  "version": 22,
+  "version": 23,
   "games": [
     {
       "id": "1",
@@ -12,6 +12,8 @@
       "cover": "https://raw.githubusercontent.com/jkzhangc/playhub-launcher/main/catalog/images/e2d43414664e3dcb588d9734.png",
       "executable": "l3dre_v0.44.exe",
       "description": "野比大雄的生化危机l3d重制版。使用godot制作。除了还原游戏机制外，还增加多人联机等新模式和机制。优化了原版一些操作和机制",
+      "changelog": "",
+      "author_notes": "",
       "screenshots": [],
       "system_requirements": "",
       "platform": "other",
@@ -20,7 +22,7 @@
         {
           "type": "nutstore",
           "url": "https://www.jianguoyun.com/p/DYU87bIQgZ_NDhiomK4GIAA",
-          "label": "坚果云电脑和手机"
+          "label": ""
         },
         {
           "type": "direct",
